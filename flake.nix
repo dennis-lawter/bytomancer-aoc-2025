@@ -32,6 +32,7 @@
         bacon
         zellij
         neovim
+        lazygit
         rustc
         cargo
         openssl.dev
