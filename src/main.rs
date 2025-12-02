@@ -11,6 +11,8 @@ use std::io::Write;
 
 #[tokio::main]
 async fn main() {
+    colored::control::set_override(true);
+
     let matches = App::new("Bytomancer's Advent of Code Solver")
         .version("1.0")
         .author("Bytomancer")
