@@ -2,20 +2,22 @@ default_job = "s1"
 env.CARGO_TERM_COLOR = "always"
 
 [jobs.s1]
-command = ["cargo", "run", "--", "d02s1"]
+command = ["cargo", "run", "--", "d03s1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
 kill = ["pkill", "-TERM", "-P"]
 watch = ["src"]
+on_success = "scroll-to-bottom"
 
 [jobs.s2]
-command = ["cargo", "run", "--", "d02s2"]
+command = ["cargo", "run", "--", "d03s2"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
 kill = ["pkill", "-TERM", "-P"]
 watch = ["src"]
+on_success = "scroll-to-bottom"
 
 
 # You may define here keybindings that would be specific to

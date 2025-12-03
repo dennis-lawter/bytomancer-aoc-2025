@@ -34,34 +34,17 @@ pub async fn generate_new_functions(func: &str) -> () {
         fs::write(mod_path, new_mod).expect(&write_file_err(mod_path));
     }
 
-    if func.ends_with("lua") {
-        // Custom fennel automation
-        let short_func = func.replace("lua", "");
-        let in_path = format!("lua_src/solutions/d00.fnl");
-        let out_path = format!("lua_src/solutions/{short_func}.fnl");
-        let template = fs::read_to_string(&in_path).expect(&build_file_err(&in_path));
-        fs::write(&out_path, template).expect(&write_file_err(&out_path));
-
-        {
-            let in_path = format!("src/solutions/d00s{sol}lua.rs");
-            let out_path = format!("src/solutions/{func}.rs");
-            let template = fs::read_to_string(&in_path).expect(&build_file_err(&in_path));
-            let new_template = template.replace(
-                "const DAY: u8 = 00;",
-                &format!("const DAY: u8 = {day:0>2};"),
-            );
-            fs::write(&out_path, new_template).expect(&write_file_err(&out_path));
-        }
-    } else {
-        let in_path = format!("src/solutions/d00s{sol}.rs");
-        let out_path = format!("src/solutions/{func}.rs");
-        let template = fs::read_to_string(&in_path).expect(&build_file_err(&in_path));
-        let new_template = template.replace(
+    let in_path = format!("src/solutions/d00s{sol}.rs");
+    let out_path = format!("src/solutions/{func}.rs");
+    let template = fs::read_to_string(&in_path).expect(&build_file_err(&in_path));
+    let new_template = template
+        .replace(
             "const DAY: u8 = 00;",
             &format!("const DAY: u8 = {day:0>2};"),
-        );
-        fs::write(&out_path, new_template).expect(&write_file_err(&out_path));
-    }
+        )
+        .replace("use super::d00s1::*;", &format!("use super::d{day:0>2}s1::*;"));
+
+    fs::write(&out_path, new_template).expect(&write_file_err(&out_path));
 }
 
 fn build_file_err(path: &str) -> String {

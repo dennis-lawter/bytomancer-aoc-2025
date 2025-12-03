@@ -4,7 +4,7 @@ use super::solutions::input_raw;
 const DAY: u8 = 00;
 const SOL: u8 = 1;
 
-async fn input(example: bool) -> Vec<String> {
+pub async fn input(example: bool) -> Vec<String> {
     let raw = input_raw(DAY, example).await;
     let lines = raw
         .lines()
