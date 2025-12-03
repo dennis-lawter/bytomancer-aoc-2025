@@ -15,7 +15,7 @@ pub async fn solve(submit: bool, example: bool) {
 
         let old_dial = dial;
         dial += line;
-        
+
         if dial == 0 || dial == 100 || dial == -100 {
             zeroes += 1;
         } else if dial > 100 || dial <= -100 {
