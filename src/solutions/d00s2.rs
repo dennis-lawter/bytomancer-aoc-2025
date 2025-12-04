@@ -1,5 +1,5 @@
-use super::solutions::final_answer;
 use super::d00s1::*;
+use super::solutions::final_answer;
 
 const DAY: u8 = 00;
 const SOL: u8 = 2;

@@ -42,7 +42,10 @@ pub async fn generate_new_functions(func: &str) -> () {
             "const DAY: u8 = 00;",
             &format!("const DAY: u8 = {day:0>2};"),
         )
-        .replace("use super::d00s1::*;", &format!("use super::d{day:0>2}s1::*;"));
+        .replace(
+            "use super::d00s1::*;",
+            &format!("use super::d{day:0>2}s1::*;"),
+        );
 
     fs::write(&out_path, new_template).expect(&write_file_err(&out_path));
 }
