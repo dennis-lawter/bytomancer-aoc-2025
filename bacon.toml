@@ -2,7 +2,7 @@ default_job = "s1"
 env.CARGO_TERM_COLOR = "always"
 
 [jobs.s1]
-command = ["cargo", "run", "--", "d04s1"]
+command = ["cargo", "run", "--", "d05s1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
@@ -11,7 +11,7 @@ watch = ["src"]
 on_success = "scroll-to-bottom"
 
 [jobs.s2]
-command = ["cargo", "run", "--", "d04s2"]
+command = ["cargo", "run", "--", "d05s2"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
