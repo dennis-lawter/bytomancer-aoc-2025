@@ -47,8 +47,7 @@ I decided to add on a few features to ease development
       option will perform some metaprogramming,
       generating new rust files.
 
-## Personal Times
-```
-      -------Part 1--------   --------Part 2--------
-Day       Time  Rank  Score       Time   Rank  Score
-```
+### Personal Times
+
+Unfortunately Eric has removed the global leaderboard,
+so my times and ranks are unknown this year.
