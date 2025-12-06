@@ -51,3 +51,4 @@ I decided to add on a few features to ease development
 
 Unfortunately Eric has removed the global leaderboard,
 so my times and ranks are unknown this year.
+
