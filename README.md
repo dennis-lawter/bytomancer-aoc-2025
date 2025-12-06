@@ -49,6 +49,12 @@ I decided to add on a few features to ease development
 
 ### Personal Times
 
-Unfortunately Eric has removed the global leaderboard,
-so my times and ranks are unknown this year.
+Day   -Part 1-   -Part 2-
+  6   00:21:55   00:59:35
+  5   00:13:49   01:01:07
+  4   00:29:18   00:34:31
+  3   00:18:35   00:37:24
+  2   00:15:21   01:11:18
+  1   00:13:31   00:28:18
+
 
