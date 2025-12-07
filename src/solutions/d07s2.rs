@@ -1,5 +1,3 @@
-#![allow(warnings)]
-
 use super::d07s1::*;
 use super::solutions::final_answer;
 use std::collections::VecDeque;
@@ -24,21 +22,21 @@ pub async fn solve(submit: bool, example: bool) {
             let c = input[y][x];
             match c {
                 'S' => {
-                    input[y+1][x] = '|';
-                    stacks[y+1][x] = 1;
+                    input[y + 1][x] = '|';
+                    stacks[y + 1][x] = 1;
                 }
                 '^' => {
-                    if input[y-1][x] == '|' {
-                        input[y][x-1] = '*';
-                        input[y][x+1] = '*';
-                        stacks[y][x-1] += stacks[y-1][x];
-                        stacks[y][x+1] += stacks[y-1][x];
+                    if input[y - 1][x] == '|' {
+                        input[y][x - 1] = '*';
+                        input[y][x + 1] = '*';
+                        stacks[y][x - 1] += stacks[y - 1][x];
+                        stacks[y][x + 1] += stacks[y - 1][x];
                     }
                 }
                 '.' | '|' | '*' => {
-                    if y != 0 && (input[y-1][x] == '|' || input[y-1][x] == '*') {
+                    if y != 0 && (input[y - 1][x] == '|' || input[y - 1][x] == '*') {
                         input[y][x] = '|';
-                        stacks[y][x] += stacks[y-1][x];
+                        stacks[y][x] += stacks[y - 1][x];
                     }
                 }
                 _ => {}
@@ -58,7 +56,6 @@ pub async fn solve(submit: bool, example: bool) {
         println!("");
     }
     let final_row = stacks.pop_back().unwrap();
-    let ans:usize = final_row.iter().sum();
+    let ans: usize = final_row.iter().sum();
     final_answer(ans, submit, DAY, SOL).await;
 }
-

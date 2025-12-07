@@ -1,5 +1,3 @@
-#![allow(warnings)]
-
 use super::solutions::final_answer;
 use super::solutions::input_raw;
 
@@ -25,17 +23,17 @@ pub async fn solve(submit: bool, example: bool) {
             let c = input[y][x];
             match c {
                 'S' => {
-                    input[y+1][x] = '|';
+                    input[y + 1][x] = '|';
                 }
                 '^' => {
-                    if input[y-1][x] == '|' {
-                        input[y][x-1] = '|';
-                        input[y][x+1] = '|';
+                    if input[y - 1][x] == '|' {
+                        input[y][x - 1] = '|';
+                        input[y][x + 1] = '|';
                         splits += 1;
                     }
                 }
                 '.' => {
-                    if y != 0 && input[y-1][x] == '|' {
+                    if y != 0 && input[y - 1][x] == '|' {
                         input[y][x] = '|';
                     }
                 }

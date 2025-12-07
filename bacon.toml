@@ -2,22 +2,26 @@ default_job = "s1"
 env.CARGO_TERM_COLOR = "always"
 
 [jobs.s1]
-command = ["cargo", "run", "--", "d07s1"]
+command = ["bash", "-lc", "cargo run --quiet -- d07s1 2>&1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
 kill = ["pkill", "-TERM", "-P"]
 watch = ["src"]
 on_success = "scroll-to-bottom"
+on_failure = "scroll-to-bottom"
+allow_warning = true
 
 [jobs.s2]
-command = ["cargo", "run", "--", "d07s2"]
+command = ["bash", "-lc", "cargo run --quiet -- d07s2 2>&1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
 kill = ["pkill", "-TERM", "-P"]
 watch = ["src"]
 on_success = "scroll-to-bottom"
+on_failure = "scroll-to-bottom"
+allow_warning = true
 
 [jobs.fmt]
 command = ["cargo", "fmt"]
@@ -29,4 +33,3 @@ on_success = "back"
 1 = "job:s1"
 2 = "job:s2"
 f = "job:fmt"
-
