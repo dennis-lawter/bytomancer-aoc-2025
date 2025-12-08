@@ -30,7 +30,7 @@ impl Point3D {
         let xd = xs.iter().max().unwrap() - xs.iter().min().unwrap();
         let yd = ys.iter().max().unwrap() - ys.iter().min().unwrap();
         let zd = zs.iter().max().unwrap() - zs.iter().min().unwrap();
-        xd*xd + yd*yd + zd*zd
+        xd * xd + yd * yd + zd * zd
     }
 }
 
@@ -51,14 +51,14 @@ pub struct ConnDb {
 }
 impl ConnDb {
     pub fn new() -> Self {
-        Self { db: vec!() }
+        Self { db: vec![] }
     }
     pub fn register(&mut self, l: &Point3D, r: &Point3D) {
         let new_l = l.clone();
         let new_r = r.clone();
-        self.db.push((new_l,new_r));
+        self.db.push((new_l, new_r));
     }
-    pub fn contains(&self, l: &Point3D, r:&Point3D) -> bool {
+    pub fn contains(&self, l: &Point3D, r: &Point3D) -> bool {
         // println!("contains call {l:?} {r:?}\n{:?}", self.db);
         let ans = self.db.iter().any(|i| &(i.0) == l && &(i.1) == r);
         // println!("{ans:?}");
@@ -102,9 +102,14 @@ pub async fn solve(submit: bool, example: bool) {
     }
     //println!("{conns:#?}");
     println!("\n\n\n");
-    
+
     for conn in conns.db.iter() {
-        println!("{:?}\t{:?}\t{}", conn.0, conn.1, conn.0.get_dist_sq(&conn.1));
+        println!(
+            "{:?}\t{:?}\t{}",
+            conn.0,
+            conn.1,
+            conn.0.get_dist_sq(&conn.1)
+        );
     }
 
     let mut cdb = CircDb::new();
@@ -121,9 +126,9 @@ pub struct CircDb {
 }
 impl CircDb {
     pub fn new() -> Self {
-        Self { db: vec!() }
+        Self { db: vec![] }
     }
     pub fn new_circuit(&mut self, pt: &Point3D) {
-        self.db.push(vec!(pt.clone()));
+        self.db.push(vec![pt.clone()]);
     }
 }
