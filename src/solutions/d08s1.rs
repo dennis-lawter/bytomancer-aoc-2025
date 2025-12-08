@@ -78,7 +78,7 @@ pub async fn solve(submit: bool, example: bool) {
     let mut shortest_index_l = 0usize;
     let mut shortest_index_r = 0usize;
 
-    let iter_count = 10usize;
+    let iter_count = if example { 10usize } else { 1_000usize };
 
     let mut conns = ConnDb::new();
 
