@@ -50,6 +50,7 @@ I decided to add on a few features to ease development
 ### Personal Times
 
 Day   -Part 1-   -Part 2-
+  8   02:20:45   02:33:28
   7   00:23:13   00:56:33
   6   00:21:55   00:59:35
   5   00:13:49   01:01:07

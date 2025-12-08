@@ -59,12 +59,12 @@ impl ConnDb {
         let new_r = r.clone();
         self.db.push((new_l, new_r));
     }
-    pub fn contains(&self, l: &Point3D, r: &Point3D) -> bool {
-        // println!("contains call {l:?} {r:?}\n{:?}", self.db);
-        let ans = self.db.iter().any(|i| &(i.0) == l && &(i.1) == r);
-        // println!("{ans:?}");
-        ans
-    }
+    // pub fn contains(&self, l: &Point3D, r: &Point3D) -> bool {
+    //     // println!("contains call {l:?} {r:?}\n{:?}", self.db);
+    //     let ans = self.db.iter().any(|i| &(i.0) == l && &(i.1) == r);
+    //     // println!("{ans:?}");
+    //     ans
+    // }
 }
 
 pub async fn solve(submit: bool, example: bool) {
@@ -93,7 +93,7 @@ pub async fn solve(submit: bool, example: bool) {
         .collect();
     memo_sorted.sort_by(|l, r| l.2.cmp(&r.2) );
 
-    for (l, r, val) in &memo_sorted {
+    for (l, r, _val) in &memo_sorted {
         let lp = &input[*l];
         let rp = &input[*r];
         conns.register(lp, rp);
@@ -102,39 +102,6 @@ pub async fn solve(submit: bool, example: bool) {
         }
     }
 
-    // for i in 0..iter_count {
-    //     println!("{i} / {iter_count}");
-    //     let mut shortest_dist_sq = u64::MAX;
-    //     let mut shortest_index_l = 0usize;
-    //     let mut shortest_index_r = 0usize;
-    //     for (l, lp) in input.iter().enumerate() {
-    //         for (r, rp) in input.iter().enumerate() {
-    //             if l == r {
-    //                 continue;
-    //             } else if l > r {
-    //                 continue;
-    //             } else if conns.contains(lp, rp) {
-    //                 continue;
-    //             } else if let Some(memo_val) = memo.get(&(l,r)) {
-    //                 if *memo_val < shortest_dist_sq {
-    //                     shortest_dist_sq = *memo_val;
-    //                     shortest_index_l = l;
-    //                     shortest_index_r = r;
-    //                 }
-    //             } else {
-    //                 let dist_sq = lp.get_dist_sq(rp);
-    //                 memo.insert((l,r), dist_sq);
-    //                 if dist_sq < shortest_dist_sq {
-    //                     shortest_dist_sq = dist_sq;
-    //                     shortest_index_l = l;
-    //                     shortest_index_r = r;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     conns.register(&input[shortest_index_l], &input[shortest_index_r]);
-    // }
-    
     //println!("{conns:#?}");
     println!("\n\n\n");
 
@@ -195,6 +162,9 @@ impl CircDb {
             lc.append(&mut rc);
             self.db.push(lc);
         }
+    }
+    pub fn can_combine_more(&self) -> bool {
+        self.db.len() != 1
     }
     pub fn sizes(&self) -> Vec<usize> {
         let mut ans = vec!();
