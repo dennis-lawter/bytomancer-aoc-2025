@@ -4,7 +4,7 @@ use super::solutions::input_raw;
 const DAY: u8 = 08;
 const SOL: u8 = 1;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Point3D {
     pub x: u64,
     pub y: u64,
@@ -47,24 +47,20 @@ pub async fn input(example: bool) -> Vec<Point3D> {
 
 #[derive(Clone, Debug)]
 pub struct ConnDb {
-    pub db: Vec<(usize, usize)>,
+    pub db: Vec<(Point3D, Point3D)>,
 }
 impl ConnDb {
     pub fn new() -> Self {
         Self { db: vec!() }
     }
-    pub fn register(&mut self, l: usize, r: usize) {
-        let arr = [l,r];
-        let l = arr.iter().min().unwrap().to_owned();
-        let r = arr.iter().max().unwrap().to_owned();
-        self.db.push((l,r));
+    pub fn register(&mut self, l: &Point3D, r: &Point3D) {
+        let new_l = l.clone();
+        let new_r = r.clone();
+        self.db.push((new_l,new_r));
     }
-    pub fn contains(&self, l: usize, r:usize) -> bool {
-        let arr = [l,r];
-        let l = arr.iter().min().unwrap().to_owned();
-        let r = arr.iter().max().unwrap().to_owned();
-        println!("contains call {l} {r}\n{:?}", self.db);
-        let ans = self.db.iter().any(|i| i.0 == l && i.1 == r);
+    pub fn contains(&self, l: &Point3D, r:&Point3D) -> bool {
+        // println!("contains call {l:?} {r:?}\n{:?}", self.db);
+        let ans = self.db.iter().any(|i| &(i.0) == l && &(i.1) == r);
         println!("{ans:?}");
         ans
     }
@@ -94,7 +90,7 @@ pub async fn solve(submit: bool, example: bool) {
                 if l > r {
                     continue;
                 }
-                if conns.contains(l, r) {
+                if conns.contains(lp, rp) {
                     continue;
                 }
                 let dist_sq = lp.get_dist_sq(rp);
@@ -105,13 +101,13 @@ pub async fn solve(submit: bool, example: bool) {
                 }
             }
         }
-        conns.register(shortest_index_l, shortest_index_r);
+        conns.register(&input[shortest_index_l], &input[shortest_index_r]);
     }
     //println!("{conns:#?}");
     println!("\n\n\n");
     
     for conn in conns.db.iter() {
-        println!("{:?}\t{:?}\t{}", input[conn.0], input[conn.1], input[conn.0].get_dist_sq(&input[conn.1]));
+        println!("{:?}\t{:?}\t{}", conn.0, conn.1, conn.0.get_dist_sq(&conn.1));
     }
 
     // now I need to follow connections to build circuits... uhhhh
