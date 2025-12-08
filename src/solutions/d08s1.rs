@@ -1,5 +1,6 @@
 use super::solutions::final_answer;
 use super::solutions::input_raw;
+use std::collections::BTreeMap;
 
 const DAY: u8 = 08;
 const SOL: u8 = 1;
@@ -68,38 +69,72 @@ impl ConnDb {
 
 pub async fn solve(submit: bool, example: bool) {
     let input = input(example).await;
-    let ans = 0;
     // println!("{input:#?}");
 
     let iter_count = if example { 10usize } else { 1_000usize };
 
     let mut conns = ConnDb::new();
 
-    for _ in 0..iter_count {
-        let mut shortest_dist_sq = u64::MAX;
-        let mut shortest_index_l = 0usize;
-        let mut shortest_index_r = 0usize;
-        for (l, lp) in input.iter().enumerate() {
-            for (r, rp) in input.iter().enumerate() {
-                if l == r {
-                    continue;
-                }
-                if l > r {
-                    continue;
-                }
-                if conns.contains(lp, rp) {
-                    continue;
-                }
-                let dist_sq = lp.get_dist_sq(rp);
-                if dist_sq < shortest_dist_sq {
-                    shortest_dist_sq = dist_sq;
-                    shortest_index_l = l;
-                    shortest_index_r = r;
-                }
+    let mut memo: BTreeMap<(usize, usize), u64> = BTreeMap::new();
+
+    for (l, lp) in input.iter().enumerate() {
+        for (r, rp) in input.iter().enumerate() {
+            if l <= r {
+                continue;
             }
+            let dist_sq = lp.get_dist_sq(rp);
+            memo.insert((l,r), dist_sq);
         }
-        conns.register(&input[shortest_index_l], &input[shortest_index_r]);
     }
+
+    let mut memo_sorted: Vec<(usize,usize,u64)> = memo
+        .iter()
+        .map(|(k,v)| (k.0, k.1, *v))
+        .collect();
+    memo_sorted.sort_by(|l, r| l.2.cmp(&r.2) );
+
+    for (l, r, val) in &memo_sorted {
+        let lp = &input[*l];
+        let rp = &input[*r];
+        conns.register(lp, rp);
+        if conns.db.len() >= iter_count {
+            break;
+        }
+    }
+
+    // for i in 0..iter_count {
+    //     println!("{i} / {iter_count}");
+    //     let mut shortest_dist_sq = u64::MAX;
+    //     let mut shortest_index_l = 0usize;
+    //     let mut shortest_index_r = 0usize;
+    //     for (l, lp) in input.iter().enumerate() {
+    //         for (r, rp) in input.iter().enumerate() {
+    //             if l == r {
+    //                 continue;
+    //             } else if l > r {
+    //                 continue;
+    //             } else if conns.contains(lp, rp) {
+    //                 continue;
+    //             } else if let Some(memo_val) = memo.get(&(l,r)) {
+    //                 if *memo_val < shortest_dist_sq {
+    //                     shortest_dist_sq = *memo_val;
+    //                     shortest_index_l = l;
+    //                     shortest_index_r = r;
+    //                 }
+    //             } else {
+    //                 let dist_sq = lp.get_dist_sq(rp);
+    //                 memo.insert((l,r), dist_sq);
+    //                 if dist_sq < shortest_dist_sq {
+    //                     shortest_dist_sq = dist_sq;
+    //                     shortest_index_l = l;
+    //                     shortest_index_r = r;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     conns.register(&input[shortest_index_l], &input[shortest_index_r]);
+    // }
+    
     //println!("{conns:#?}");
     println!("\n\n\n");
 
@@ -116,6 +151,17 @@ pub async fn solve(submit: bool, example: bool) {
     for node in &input {
         cdb.new_circuit(node);
     }
+    for conn in conns.db.iter() {
+        cdb.combine(&conn.0, &conn.1);
+    }
+
+    println!("{cdb:#?}");
+    let mut sizes = cdb.sizes();
+    sizes.sort();
+    sizes.reverse();
+    println!("{:?}", sizes);
+
+    let ans = sizes[0]*sizes[1]*sizes[2];
 
     final_answer(ans, submit, DAY, SOL).await;
 }
@@ -130,5 +176,31 @@ impl CircDb {
     }
     pub fn new_circuit(&mut self, pt: &Point3D) {
         self.db.push(vec![pt.clone()]);
+    }
+    fn pop_entry_with_pt(&mut self, pt: &Point3D) -> Vec<Point3D> {
+        for i in 0..self.db.len() {
+            if self.db[i].contains(pt) {
+                return self.db.remove(i);
+            }
+        }
+        panic!("Can't find {pt:?}!");
+    }
+    pub fn combine(&mut self, lp: &Point3D, rp: &Point3D) {
+        let mut lc = self.pop_entry_with_pt(lp);
+        if lc.contains(rp) {
+            println!("WARN: lc contains rp");
+            self.db.push(lc);
+        } else {
+            let mut rc = self.pop_entry_with_pt(rp);
+            lc.append(&mut rc);
+            self.db.push(lc);
+        }
+    }
+    pub fn sizes(&self) -> Vec<usize> {
+        let mut ans = vec!();
+        for circ in &self.db {
+            ans.push(circ.len());
+        }
+        ans
     }
 }
