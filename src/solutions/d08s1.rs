@@ -61,7 +61,7 @@ impl ConnDb {
     pub fn contains(&self, l: &Point3D, r:&Point3D) -> bool {
         // println!("contains call {l:?} {r:?}\n{:?}", self.db);
         let ans = self.db.iter().any(|i| &(i.0) == l && &(i.1) == r);
-        println!("{ans:?}");
+        // println!("{ans:?}");
         ans
     }
 }
@@ -70,18 +70,15 @@ pub async fn solve(submit: bool, example: bool) {
     let input = input(example).await;
     let ans = 0;
     // println!("{input:#?}");
-    let mut shortest_dist_sq = u64::MAX;
-    let mut shortest_index_l = 0usize;
-    let mut shortest_index_r = 0usize;
 
     let iter_count = if example { 10usize } else { 1_000usize };
 
     let mut conns = ConnDb::new();
 
     for _ in 0..iter_count {
-        shortest_dist_sq = u64::MAX;
-        shortest_index_l = 0usize;
-        shortest_index_r = 0usize;
+        let mut shortest_dist_sq = u64::MAX;
+        let mut shortest_index_l = 0usize;
+        let mut shortest_index_r = 0usize;
         for (l, lp) in input.iter().enumerate() {
             for (r, rp) in input.iter().enumerate() {
                 if l == r {
@@ -110,13 +107,23 @@ pub async fn solve(submit: bool, example: bool) {
         println!("{:?}\t{:?}\t{}", conn.0, conn.1, conn.0.get_dist_sq(&conn.1));
     }
 
-    // now I need to follow connections to build circuits... uhhhh
-    // 
+    let mut cdb = CircDb::new();
+    for node in &input {
+        cdb.new_circuit(node);
+    }
 
     final_answer(ans, submit, DAY, SOL).await;
 }
 
 #[derive(Clone, Debug)]
 pub struct CircDb {
-    pub db: Vec<Vec<(Point3D, Point3D)>>,
+    pub db: Vec<Vec<Point3D>>,
+}
+impl CircDb {
+    pub fn new() -> Self {
+        Self { db: vec!() }
+    }
+    pub fn new_circuit(&mut self, pt: &Point3D) {
+        self.db.push(vec!(pt.clone()));
+    }
 }

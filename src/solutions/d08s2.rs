@@ -5,7 +5,7 @@ const DAY: u8 = 08;
 const SOL: u8 = 2;
 
 pub async fn solve(submit: bool, example: bool) {
-    let input = input(example).await;
+    let _input = input(example).await;
     let ans = 0;
     final_answer(ans, submit, DAY, SOL).await;
 }
