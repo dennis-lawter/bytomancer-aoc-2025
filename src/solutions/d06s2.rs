@@ -25,7 +25,7 @@ pub async fn input(example: bool) -> (Vec<Vec<u64>>, Vec<char>) {
     for x in (0..grid[0].len()).rev() {
         let mut num = 0;
 
-        for y in (0..grid.len()) {
+        for y in 0..grid.len() {
             if grid[y][x] != ' ' {
                 num *= 10;
                 num += grid[y][x].to_digit(10).expect("Invalid char...") as u64;
