@@ -49,7 +49,9 @@ I decided to add on a few features to ease development
 
 ### Personal Times
 
+```
 Day   -Part 1-   -Part 2-
+  9   00:11:41   04:33:31
   8   02:20:45   02:33:28
   7   00:23:13   00:56:33
   6   00:21:55   00:59:35
@@ -58,4 +60,5 @@ Day   -Part 1-   -Part 2-
   3   00:18:35   00:37:24
   2   00:15:21   01:11:18
   1   00:13:31   00:28:18
+```
 
