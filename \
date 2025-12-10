@@ -46,12 +46,9 @@ pub async fn solve(submit: bool, example: bool) {
     let input = input(example).await;
 
     let mut ans = 0;
-    let num_machs = input.len();
-    for (i, mach) in input.iter().enumerate() {
+    for mach in &input {
         // let jmach = JMach::from_mach(mach);
         // let presses = find_jolt_buttons(&jmach);
-        let perc = i as f64 / num_machs as f64;
-        println!("Processing machine {} / {} ({:.2}%)", i, num_machs, perc*100.0);
         let num_jolts = mach.jolts.len();
         let init_state = vec![0u32;num_jolts];
         let init_states = vec![init_state];
@@ -63,9 +60,7 @@ pub async fn solve(submit: bool, example: bool) {
 }
 
 pub fn find_jolt_buttons(mach:&Machine, states: &Vec<Vec<u32>>) -> usize {
-    let nstates = states.len();
-    assert_ne!(0, nstates);
-    print("{nstates}");
+    assert_ne!(0, states.len());
     // println!("");
     // println!("{states:?}");
     // println!("");
@@ -87,7 +82,7 @@ pub fn find_jolt_buttons(mach:&Machine, states: &Vec<Vec<u32>>) -> usize {
                     break;
                 }
             }
-            if valid && !new_states.contains(&new_state) {
+            if valid {
                 // println!("Adding {new_state:?}");
                 new_states.push(new_state);
             }
