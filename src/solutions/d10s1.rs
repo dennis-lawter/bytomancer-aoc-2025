@@ -19,15 +19,6 @@ impl Machine {
         let lights = caps[1].chars()
             .map(|i| i == '#')
             .collect();
-
-        // let wire_re_raw = r#"\(([\)]+)\)"#;
-        // let wire_re = regex::Regex::new(wire_re_raw).unwrap();
-        // let wire_caps = wire_re.captures_iter(&caps[2]);
-        // println!("{wire_caps:#?}");
-        // let mut wires = vec!();
-        // for (_, [wire_cap_group, _]) in wire_caps.map(|c| c.extract()) {
-        //     wires.push(csv_nums_to_vec(wire_cap_group));
-        // }
         
         let cleaned = caps[2].replace("(", "").replace(")", "");
         let wires = cleaned.split(" ")
@@ -67,12 +58,6 @@ impl SimpMach {
         let mut wires = vec!();
         let num_lights = input.lights.len();
         for wire_group in &input.wires {
-            // let mut wire_val = 0;
-            // for wire in wire_group {
-            //     wire_val += 1 << wire;
-            // }
-            // wires.push(wire_val);
-            
             // bad solution...
             let mut tmp = vec![false;num_lights];
             for wire in wire_group {
@@ -144,14 +129,4 @@ pub fn find_simp_buttons(simp:&SimpMach, states: &[u32]) -> usize {
         }
     }
     find_simp_buttons(simp, &new_states) + 1
-    // let mut new_: Vec<usize> = Vec::with_capacity(simp.wires.len());
-    // for btn in &simp.wires {
-    //     presses.push(find_simp_buttons(simp, state ^ *btn) + 1);
-    // }
-    // *presses.iter().min().unwrap()
 }
-
-// pub fn find_fewest_buttons(mach: &Machine, state: &Vec<bool>) -> usize {
-//     if state == simp.
-//     0 // todo
-// }
