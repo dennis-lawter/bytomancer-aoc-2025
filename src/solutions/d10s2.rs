@@ -65,7 +65,7 @@ pub async fn solve(submit: bool, example: bool) {
 pub fn find_jolt_buttons(mach:&Machine, states: &Vec<Vec<u32>>) -> usize {
     let nstates = states.len();
     assert_ne!(0, nstates);
-    print("{nstates}");
+    println!("{nstates}");
     // println!("");
     // println!("{states:?}");
     // println!("");
