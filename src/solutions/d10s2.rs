@@ -27,17 +27,22 @@ pub async fn solve(submit: bool, example: bool) {
     let num_machs = input.len();
     for (i, mach) in input.iter().enumerate() {
         let perc = i as f64 / num_machs as f64;
-        println!("Processing machine {} / {} ({:.2}%)", i, num_machs, perc*100.0);
+        println!(
+            "Processing machine {} / {} ({:.2}%)",
+            i,
+            num_machs,
+            perc * 100.0
+        );
         let num_jolts = mach.jolts.len();
-        let init_state = vec![0u32;num_jolts];
+        let init_state = vec![0u32; num_jolts];
         // let init_states = vec![init_state];
-        let mut memo:HashSet<String> = HashSet::new();
+        let mut memo: HashSet<String> = HashSet::new();
         // let presses = find_jolt_buttons(&mach, &init_state, &mut memo).expect("No valid solution?");
         // tried bfs, tried dfs & dfs+memo, now going to try left-fill
         let presses = find_jolt_buttons(&mach, &init_state, &mut memo).expect("No valid solution?");
         ans += presses;
     }
-    
+
     final_answer(ans, submit, DAY, SOL).await;
 }
 
@@ -52,7 +57,11 @@ pub fn pattern_filter(wires: &&Vec<u32>, notouch: &Vec<usize>, want: usize) -> b
     wires.contains(&(want as u32))
 }
 
-pub fn find_jolt_buttons(mach:&Machine, state:&Vec<u32>, memo: &mut HashSet<String>) -> Option<usize> {
+pub fn find_jolt_buttons(
+    mach: &Machine,
+    state: &Vec<u32>,
+    memo: &mut HashSet<String>,
+) -> Option<usize> {
     let goal = &mach.jolts;
     if goal == state {
         return Some(0);
@@ -62,21 +71,24 @@ pub fn find_jolt_buttons(mach:&Machine, state:&Vec<u32>, memo: &mut HashSet<Stri
         return None;
     }
     memo.insert(state_key);
-    let mut idx_need_jolts: Vec<usize> = vec!();
-    let mut idx_no_touch: Vec<usize> = vec!();
+    let mut idx_need_jolts: Vec<usize> = vec![];
+    let mut idx_no_touch: Vec<usize> = vec![];
     for i in 0..goal.len() {
         if state[i] > goal[i] {
             return None;
         } else if state[i] == goal[i] {
             idx_no_touch.push(i);
-        } if state[i] < goal[i] {
+        }
+        if state[i] < goal[i] {
             idx_need_jolts.push(i);
         }
     }
     for idx in 0..idx_need_jolts.len() {
         let i_want_this_number = idx_need_jolts[idx];
         // println!("{i_want_this_number}");
-        let patterns_to_apply: Vec<Vec<u32>> = mach.wires.iter()
+        let patterns_to_apply: Vec<Vec<u32>> = mach
+            .wires
+            .iter()
             .filter(|w| pattern_filter(w, &idx_no_touch, i_want_this_number))
             .map(|w| w.clone())
             .collect();
@@ -84,7 +96,7 @@ pub fn find_jolt_buttons(mach:&Machine, state:&Vec<u32>, memo: &mut HashSet<Stri
         for p in patterns_to_apply {
             let new_state = apply_pattern_to_state(&p, &state);
             if let Some(x) = find_jolt_buttons(mach, &new_state, memo) {
-                return Some(x+1);
+                return Some(x + 1);
             }
         }
         return None; // remove in case I want to go through this loop; but I doubt I should...
@@ -158,4 +170,3 @@ pub fn apply_pattern_to_state(pat: &Vec<u32>, state: &Vec<u32>) -> Vec<u32> {
 //
 //     find_jolt_buttons(mach, &new_states) + 1
 // }
-

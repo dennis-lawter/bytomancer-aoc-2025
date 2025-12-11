@@ -16,14 +16,10 @@ impl Machine {
         let re = regex::Regex::new(re_raw).unwrap();
         let caps = re.captures(input).expect("re match fail");
 
-        let lights = caps[1].chars()
-            .map(|i| i == '#')
-            .collect();
-        
+        let lights = caps[1].chars().map(|i| i == '#').collect();
+
         let cleaned = caps[2].replace("(", "").replace(")", "");
-        let wires = cleaned.split(" ")
-            .map(csv_nums_to_vec)
-            .collect();
+        let wires = cleaned.split(" ").map(csv_nums_to_vec).collect();
 
         let jolts = csv_nums_to_vec(&caps[3]);
 
@@ -34,7 +30,8 @@ impl Machine {
         }
     }
     pub fn debug_lights(&self) -> String {
-        self.lights.iter()
+        self.lights
+            .iter()
             .map(|i| if *i { '#' } else { '.' })
             .collect()
     }
@@ -55,11 +52,11 @@ impl SimpMach {
             }
         }
 
-        let mut wires = vec!();
+        let mut wires = vec![];
         let num_lights = input.lights.len();
         for wire_group in &input.wires {
             // bad solution...
-            let mut tmp = vec![false;num_lights];
+            let mut tmp = vec![false; num_lights];
             for wire in wire_group {
                 tmp[*wire as usize] = true;
             }
@@ -73,15 +70,15 @@ impl SimpMach {
             wires.push(wire_val);
         }
 
-        Self {
-            lights,
-            wires,
-        }
+        Self { lights, wires }
     }
 }
 
 pub fn csv_nums_to_vec(input: &str) -> Vec<u32> {
-    input.split(",").map(|i| i.parse().expect("invalid num {i}")).collect()
+    input
+        .split(",")
+        .map(|i| i.parse().expect("invalid num {i}"))
+        .collect()
 }
 
 pub async fn input(example: bool) -> Vec<Machine> {
@@ -114,11 +111,11 @@ pub async fn solve(submit: bool, example: bool) {
         let fewest_buttons = find_simp_buttons(&simp, &[0]);
         ans += fewest_buttons;
     }
-    
+
     final_answer(ans, submit, DAY, SOL).await;
 }
 
-pub fn find_simp_buttons(simp:&SimpMach, states: &[u32]) -> usize {
+pub fn find_simp_buttons(simp: &SimpMach, states: &[u32]) -> usize {
     if states.contains(&simp.lights) {
         return 0;
     }

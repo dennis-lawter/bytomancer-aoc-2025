@@ -19,15 +19,13 @@ pub async fn solve(submit: bool, example: bool) {
                 continue;
             }
             let dist_sq = lp.get_dist_sq(rp);
-            memo.insert((l,r), dist_sq);
+            memo.insert((l, r), dist_sq);
         }
     }
 
-    let mut memo_sorted: Vec<(usize,usize,u64)> = memo
-        .iter()
-        .map(|(k,v)| (k.0, k.1, *v))
-        .collect();
-    memo_sorted.sort_by(|l, r| l.2.cmp(&r.2) );
+    let mut memo_sorted: Vec<(usize, usize, u64)> =
+        memo.iter().map(|(k, v)| (k.0, k.1, *v)).collect();
+    memo_sorted.sort_by(|l, r| l.2.cmp(&r.2));
 
     for (l, r, _val) in &memo_sorted {
         let lp = &input[*l];
@@ -70,7 +68,7 @@ pub async fn solve(submit: bool, example: bool) {
     // println!("{:?}", sizes);
     //
     // let ans = sizes[0]*sizes[1]*sizes[2];
-    
+
     //let ans = 0;
 
     final_answer(ans, submit, DAY, SOL).await;

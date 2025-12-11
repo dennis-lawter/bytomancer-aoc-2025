@@ -10,7 +10,7 @@ pub enum TileState {
     Edge,
     Inner,
     Outer,
-    Untested
+    Untested,
 }
 impl TileState {
     pub fn to_char(&self) -> char {
@@ -26,17 +26,25 @@ impl TileState {
 
 pub async fn solve(submit: bool, example: bool) {
     let input = input(example).await;
-    
+
     // well, I know this is awful but it seems to work..?
     // glad I have 62 GiB of RAM...
-    let mut xs = vec!();
-    let mut ys = vec!();
+    let mut xs = vec![];
+    let mut ys = vec![];
     for p in &input {
         xs.push(p.x);
         ys.push(p.y);
     }
-    println!("XRange: {} - {}", xs.iter().min().unwrap(), xs.iter().max().unwrap());
-    println!("YRange: {} - {}", ys.iter().min().unwrap(), ys.iter().max().unwrap());
+    println!(
+        "XRange: {} - {}",
+        xs.iter().min().unwrap(),
+        xs.iter().max().unwrap()
+    );
+    println!(
+        "YRange: {} - {}",
+        ys.iter().min().unwrap(),
+        ys.iter().max().unwrap()
+    );
     let xmax = *xs.iter().max().unwrap() as usize + 1;
     let ymax = *ys.iter().max().unwrap() as usize + 1;
     //let bounds = (xs.iter().max().unwrap() * ys.iter().max().unwrap()) as usize;
@@ -44,7 +52,7 @@ pub async fn solve(submit: bool, example: bool) {
     // let grid_row = vec![TileState::Untested;xmax];
     for _ in 0..ymax {
         // grid.push(grid_row.clone());
-        grid.push(vec![TileState::Untested;xmax]);
+        grid.push(vec![TileState::Untested; xmax]);
     }
 
     for p in &input {
@@ -52,25 +60,21 @@ pub async fn solve(submit: bool, example: bool) {
     }
 
     for (i, p) in input.iter().enumerate() {
-        let prev_i = if i == 0 {
-            input.len()-1
-        } else {
-            i - 1
-        };
+        let prev_i = if i == 0 { input.len() - 1 } else { i - 1 };
         let prev_p = &input[prev_i];
         // fill in the edges
         if prev_p.x == p.x {
             let x = p.x as usize;
-            let range_max = *[prev_p.y,p.y].iter().max().unwrap() as usize;
-            let range_min = *[prev_p.y,p.y].iter().min().unwrap() as usize;
-            for y in (range_min+1)..range_max {
+            let range_max = *[prev_p.y, p.y].iter().max().unwrap() as usize;
+            let range_min = *[prev_p.y, p.y].iter().min().unwrap() as usize;
+            for y in (range_min + 1)..range_max {
                 grid[y][x] = TileState::Edge;
             }
         } else if prev_p.y == p.y {
             let y = p.y as usize;
-            let range_max = *[prev_p.x,p.x].iter().max().unwrap() as usize;
-            let range_min = *[prev_p.x,p.x].iter().min().unwrap() as usize;
-            for x in (range_min+1)..range_max {
+            let range_max = *[prev_p.x, p.x].iter().max().unwrap() as usize;
+            let range_min = *[prev_p.x, p.x].iter().min().unwrap() as usize;
+            for x in (range_min + 1)..range_max {
                 grid[y][x] = TileState::Edge;
             }
         } else {
@@ -86,15 +90,14 @@ pub async fn solve(submit: bool, example: bool) {
             if following_edge {
                 if grid[y][x] == TileState::Corner {
                     following_edge = false;
-                    if x+1 < xmax {
-                        inside = grid[y-1][x+1] == TileState::Inner;
+                    if x + 1 < xmax {
+                        inside = grid[y - 1][x + 1] == TileState::Inner;
                     }
                 }
             } else {
                 if grid[y][x] == TileState::Corner {
                     following_edge = true;
-                }
-                else if grid[y][x] == TileState::Edge {
+                } else if grid[y][x] == TileState::Edge {
                     inside = !inside;
                 } else if grid[y][x] == TileState::Untested {
                     grid[y][x] = if inside {
@@ -126,7 +129,7 @@ pub async fn solve(submit: bool, example: bool) {
             }
             let area = p1.get_area_with(p2);
             if area > largest_area {
-                if is_valid_area(p1,p2,&grid) {
+                if is_valid_area(p1, p2, &grid) {
                     largest_area = area;
                     println!("new largest found:");
                     println!("area: {area}");
@@ -140,8 +143,8 @@ pub async fn solve(submit: bool, example: bool) {
 }
 
 pub fn is_valid_area(p1: &Point2D, p2: &Point2D, grid: &Vec<Vec<TileState>>) -> bool {
-    let xs = [p1.x,p2.x];
-    let ys = [p1.y,p2.y];
+    let xs = [p1.x, p2.x];
+    let ys = [p1.y, p2.y];
     let xmin = *xs.iter().min().unwrap();
     let xmax = *xs.iter().max().unwrap();
     let ymin = *ys.iter().min().unwrap();
