@@ -43,14 +43,14 @@ pub async fn input(example: bool) -> Vec<Device> {
 pub async fn solve(submit: bool, example: bool) {
     let input = input(example).await;
     let tree = dev_list_to_btree_map(input);
-    let paths = traverse_all(&tree);
+    let paths = traverse_all(&tree, "you", "out");
     println!("{paths:#?}");
     final_answer(paths.len(), submit, DAY, SOL).await;
 }
 
-pub fn traverse_all(devs: &DevTree) -> Vec<Vec<String>> {
-    let first_path = vec!["you".to_owned()];
-    let goal = "out".to_owned();
+pub fn traverse_all(devs: &DevTree, start: &str, end: &str) -> Vec<Vec<String>> {
+    let first_path = vec![start.to_owned()];
+    let goal = end.to_owned();
 
     let paths = vec![first_path];
     traverse_all_to(devs, &paths, &goal)
