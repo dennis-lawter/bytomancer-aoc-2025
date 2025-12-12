@@ -134,7 +134,23 @@ pub async fn input(example: bool) -> Prob {
 }
 
 pub async fn solve(submit: bool, example: bool) {
-    let input = input(example).await;
-    println!("{input:#?}");
-    final_answer(0, submit, DAY, SOL).await;
+    let prob = input(example).await;
+    println!("{prob:#?}");
+    let mut ans = 0;
+    for (i, reg) in prob.regions.iter().enumerate() {
+        if can_solve(&prob, reg) {
+            ans += 1;
+        }
+    }
+    final_answer(ans, submit, DAY, SOL).await;
+}
+
+pub fn can_solve(prob: &Prob, reg: &Reg) -> bool {
+    let start_state = vec![0u64; reg.h];
+    let pres_req = &reg.idx_counts;
+    solve_state(&start_state, reg.w, &pres_req)
+}
+
+pub fn solve_state(state: &Vec<u64>, w: usize, req: &Vec<usize>) -> bool {
+    todo!()
 }
