@@ -2,7 +2,7 @@ default_job = "s1"
 env.CARGO_TERM_COLOR = "always"
 
 [jobs.s1]
-command = ["bash", "-lc", "cargo run --quiet -- d11s1 -e 2>&1"]
+command = ["bash", "-lc", "cargo run --quiet -- d12s1 -e 2>&1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
@@ -13,7 +13,7 @@ on_failure = "scroll-to-bottom"
 allow_warning = true
 
 [jobs.s2]
-command = ["bash", "-lc", "cargo run --quiet -- d11s2 -e 2>&1"]
+command = ["bash", "-lc", "cargo run --quiet -- d12s2 -e 2>&1"]
 need_stdout = true
 background = false
 on_change_strategy = "kill_then_restart"
